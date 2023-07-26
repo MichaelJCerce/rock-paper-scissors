@@ -1,0 +1,144 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  margin: 0;
+  color: #e9c46a;
+  background: #264653;
+  margin-top: 6rem;
+  overflow: hidden;
+}
+
+h1 {
+  font-size: 4rem;
+  text-align: center;
+  margin-block: 0;
+  padding-block: 1rem;
+  border-bottom: 10px solid #e9c46a;
+}
+
+button {
+  font-family: inherit;
+  font-size: 1.4rem;
+  color: #264653;
+  background: #f4a261;
+  font-size: 1.4rem;
+  padding: 0.3em 1.5em;
+  cursor: pointer;
+  border: none;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  background: #264653;
+  border: 10px solid #e9c46a;
+}
+
+.status {
+  /* margin-bottom: 1.5rem; */
+}
+
+.player,
+.computer {
+  display: inline-block;
+  font-size: 8rem;
+}
+
+.score {
+  display: flex;
+  justify-content: space-evenly;
+  border-bottom: 10px solid #e9c46a;
+}
+
+span {
+  border-right: 10px solid #e9c46a;
+}
+
+.round-result {
+  font-size: 1.4rem;
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  transition: all 0.5s;
+}
+
+.controls {
+  padding: 1rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.score-control {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.5rem;
+}
+
+.set-score {
+  display: flex;
+  gap: 0.5rem;
+  align-items:center;
+}
+
+.set-score label {
+    font-size: 1.6rem;
+}
+
+.set-score #score {
+  border: none;
+  margin-top:.26rem;
+}
+
+.draw {
+  color: #ffd60a;
+  transform: scale(1.2);
+}
+
+.win {
+  color: #06d6a0;
+  transform: scale(1.2);
+}
+
+.lose {
+  color: #ef476f;
+  transform: scale(1.2);
+}
+
+@media (min-width: 600px) {
+    .actions {
+        justify-content: space-evenly;
+    }
+    .score-control {
+        justify-content: center;
+      }
+}
+
+@media (min-width: 810px) {
+  body {
+    margin-top: 6rem;
+  }
+  .game {
+    width: 50rem;
+  }
+  .actions {
+    justify-content: center;
+    gap: 2rem;
+  }
+  .score-control {
+    justify-content: center;
+  }
+  button {
+    font-size: 1.4rem;
+  }
+}

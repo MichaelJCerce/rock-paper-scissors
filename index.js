@@ -7,12 +7,11 @@ const buttons = document.querySelectorAll("button.play");
 const playerScoreDisplay = document.querySelector(".player");
 const computerScoreDisplay = document.querySelector(".computer");
 const scoreSelector = document.querySelector("#score");
-const resetButton = document.querySelector(".reset");
+const resetButton = document.querySelector(".reset-score");
 let maxScore = +scoreSelector.value;
 let playerScore = 0;
 let computerScore = 0;
 let gameOver = false;
-
 
 buttons.forEach((button) =>
   button.addEventListener("click", (e) => {
@@ -21,7 +20,13 @@ buttons.forEach((button) =>
 );
 resetButton.addEventListener("click", () => gameReset());
 scoreSelector.addEventListener("change", () => gameReset());
-
+roundResult.addEventListener("transitionend", (e) => {
+  if (e.propertyName === "transform") {
+    roundResult.classList.remove("win");
+    roundResult.classList.remove("lose");
+    roundResult.classList.remove("draw");
+  }
+});
 
 function getComputerChoice() {
   const actions = ["Rock", "Paper", "Scissors"];
@@ -37,6 +42,9 @@ function playRound(playerChoice, computerChoice) {
 
   if (playerChoice === computerChoice) {
     roundResult.textContent = "Draw!";
+    roundResult.classList.add("draw");
+    roundResult.classList.remove("win");
+    roundResult.classList.remove("lose");
     return 0;
   }
 
@@ -56,11 +64,17 @@ function playRound(playerChoice, computerChoice) {
   }
 
   if (win) {
-    roundResult.textContent = `You Win! ${playerChoice} beats ${computerChoice}`;
+    roundResult.textContent = `Round won! ${playerChoice} beats ${computerChoice}`;
     playerScoreDisplay.textContent = ++playerScore;
+    roundResult.classList.add("win");
+    roundResult.classList.remove("draw");
+    roundResult.classList.remove("lose");
   } else {
-    roundResult.textContent = `You Lose! ${computerChoice} beats ${playerChoice}`;
+    roundResult.textContent = `Round lost! ${computerChoice} beats ${playerChoice}`;
     computerScoreDisplay.textContent = ++computerScore;
+    roundResult.classList.add("lose");
+    roundResult.classList.remove("draw");
+    roundResult.classList.remove("win");
   }
   isGameOver();
 }
@@ -72,7 +86,7 @@ function gameReset() {
   playerScoreDisplay.textContent = 0;
   computerScoreDisplay.textContent = 0;
   gameOver = false;
-  roundResult.textContent = "Select one of the options below to begin!"
+  roundResult.textContent = "Select one of the options below to begin!";
 }
 
 function isGameOver() {
