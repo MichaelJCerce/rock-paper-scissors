@@ -1,15 +1,42 @@
-const actions = ["Rock", "Paper", "Scissors"];
+// const rock = document.querySelector(".rock");
+// const paper = document.querySelector(".paper");
+// const scissors = document.querySelector(".scissors");
+// const results = document.querySelector(".results");
+const roundResult = document.querySelector(".round-result");
+const buttons = document.querySelectorAll("button.play");
+const playerScoreDisplay = document.querySelector(".player");
+const computerScoreDisplay = document.querySelector(".computer");
+const scoreSelector = document.querySelector("#score");
+const resetButton = document.querySelector(".reset");
+let maxScore = +scoreSelector.value;
+let playerScore = 0;
+let computerScore = 0;
+let gameOver = false;
+
+
+buttons.forEach((button) =>
+  button.addEventListener("click", (e) => {
+    playRound(e.target.classList[0], getComputerChoice());
+  })
+);
+resetButton.addEventListener("click", () => gameReset());
+scoreSelector.addEventListener("change", () => gameReset());
+
 
 function getComputerChoice() {
+  const actions = ["Rock", "Paper", "Scissors"];
   return actions[Math.floor(Math.random() * 3)];
 }
 
 function playRound(playerChoice, computerChoice) {
+  if (gameOver) {
+    return;
+  }
   playerChoice = playerChoice.toUpperCase()[0] + playerChoice.slice(1);
   let win;
 
   if (playerChoice === computerChoice) {
-    console.log("Draw!");
+    roundResult.textContent = "Draw!";
     return 0;
   }
 
@@ -27,31 +54,33 @@ function playRound(playerChoice, computerChoice) {
       console.log("No cheating! You can only use Rock, Paper, or Scissors!");
       return 0;
   }
-  
+
   if (win) {
-    console.log(`You Win! ${playerChoice} beats ${computerChoice}`);
-    return 1;
+    roundResult.textContent = `You Win! ${playerChoice} beats ${computerChoice}`;
+    playerScoreDisplay.textContent = ++playerScore;
   } else {
-    console.log(`You Lose! ${computerChoice} beats ${playerChoice}`);
-    return -1;
+    roundResult.textContent = `You Lose! ${computerChoice} beats ${playerChoice}`;
+    computerScoreDisplay.textContent = ++computerScore;
   }
+  isGameOver();
 }
 
-function game(rounds) {
-  let score = 0;
-  for (let i = 0; i < rounds; ++i) {
-    let playerChoice = prompt("Rock, Paper, or Scissors?");
-    let computerChoice = getComputerChoice();
-    score += playRound(playerChoice, computerChoice);
-  }
-
-  if (score > 0) {
-    console.log("You won!");
-  } else if (score === 0) {
-    console.log("You tied!");
-  } else {
-    console.log("You lost!");
-  }
+function gameReset() {
+  playerScore = 0;
+  computerScore = 0;
+  maxScore = +scoreSelector.value;
+  playerScoreDisplay.textContent = 0;
+  computerScoreDisplay.textContent = 0;
+  gameOver = false;
+  roundResult.textContent = "Select one of the options below to begin!"
 }
 
-game(5);
+function isGameOver() {
+  if (playerScore === maxScore) {
+    roundResult.textContent = "You won!";
+    gameOver = true;
+  } else if (computerScore === maxScore) {
+    roundResult.textContent = "The computer won!";
+    gameOver = true;
+  }
+}
