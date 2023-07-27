@@ -1,33 +1,27 @@
-// const rock = document.querySelector(".rock");
-// const paper = document.querySelector(".paper");
-// const scissors = document.querySelector(".scissors");
-// const results = document.querySelector(".results");
-const roundResult = document.querySelector(".round-result");
-const buttons = document.querySelectorAll("button.play");
 const playerScoreDisplay = document.querySelector(".player");
 const computerScoreDisplay = document.querySelector(".computer");
+const gameDialog = document.querySelector(".game-dialog");
+const playButtons = document.querySelectorAll("button.play");
 const scoreSelector = document.querySelector("#score");
 const resetButton = document.querySelector(".reset-score");
+
+let isGameOver = false;
 let maxScore = +scoreSelector.value;
 let playerScore = 0;
 let computerScore = 0;
-let gameOver = false;
 
-buttons.forEach((button) =>
+gameDialog.addEventListener("transitionend", (e) => {
+  if (e.propertyName === "transform") {
+    setStyle("");
+  }
+});
+playButtons.forEach((button) =>
   button.addEventListener("click", (e) => {
     playRound(e.target.classList[0], getComputerChoice());
   })
 );
-resetButton.addEventListener("click", () => gameReset());
-scoreSelector.addEventListener("change", () => gameReset());
-roundResult.addEventListener("transitionend", (e) => {
-    setStyle("");
-});
-
-playerScoreDisplay.addEventListener("transitionend", (e) => {
-  setStyle("");
-});
-
+scoreSelector.addEventListener("change", () => resetGame());
+resetButton.addEventListener("click", () => resetGame());
 
 function getComputerChoice() {
   const actions = ["Rock", "Paper", "Scissors"];
@@ -35,88 +29,93 @@ function getComputerChoice() {
 }
 
 function playRound(playerChoice, computerChoice) {
-  if (gameOver) {
+  if (isGameOver) {
     return;
   }
+
   playerChoice = playerChoice.toUpperCase()[0] + playerChoice.slice(1);
-  let win;
 
   if (playerChoice === computerChoice) {
+    gameDialog.textContent = "Round tied!";
     setStyle("draw");
     return 0;
   }
 
+  let isRoundWon;
+
   switch (playerChoice) {
     case "Rock":
-      computerChoice === "Paper" ? (win = false) : (win = true);
+      computerChoice === "Paper" ? (isRoundWon = false) : (isRoundWon = true);
       break;
     case "Paper":
-      computerChoice === "Scissors" ? (win = false) : (win = true);
+      computerChoice === "Scissors" ? (isRoundWon = false) : (isRoundWon = true);
       break;
     case "Scissors":
-      computerChoice === "Rock" ? (win = false) : (win = true);
+      computerChoice === "Rock" ? (isRoundWon = false) : (isRoundWon = true);
       break;
     default:
       console.log("No cheating! You can only use Rock, Paper, or Scissors!");
       return 0;
   }
 
-  if (win) {
-    roundResult.textContent = `Round won! ${playerChoice} beats ${computerChoice}`;
+  if (isRoundWon) {
+    gameDialog.textContent = `Round won! ${playerChoice} beats ${computerChoice}`;
     playerScoreDisplay.textContent = ++playerScore;
     setStyle("win");
   } else {
-    roundResult.textContent = `Round lost! ${computerChoice} beats ${playerChoice}`;
+    gameDialog.textContent = `Round lost! ${computerChoice} beats ${playerChoice}`;
     computerScoreDisplay.textContent = ++computerScore;
     setStyle("lose");
   }
 
-  isGameOver();
+  checkGameState();
 }
 
 function setStyle(result) {
+  //needed because button spam broke the transition
+  gameDialog.classList.remove('grow');
+
   switch (result) {
     case "win":
-      roundResult.classList.value = "round-result win-round";
+      gameDialog.classList.value = "game-dialog win-round grow";
       break;
     case "lose":
-      roundResult.classList.value = "round-result lose-round";
+      gameDialog.classList.value = "game-dialog lose-round grow";
       break;
     case "draw":
-      roundResult.textContent = "Draw!";
-      roundResult.classList.value = "round-result draw-round";
+      gameDialog.classList.value = "game-dialog draw-round grow";
       break;
     case "reset":
-      roundResult.textContent = "Select one of the options below to begin!";
-      roundResult.classList.value = "round-result";
+      gameDialog.textContent = "Select an action to begin playing!";
+      gameDialog.classList.value = "game-dialog";
       playerScoreDisplay.classList.value = "player"
       computerScoreDisplay.classList.value = "computer"
     default:
-      roundResult.classList.value = "round-result";
-  }
+      gameDialog.classList.remove('grow');
+  } 
 }
 
-function gameReset() {
+function resetGame() {
+  isGameOver = false;
+  maxScore = +scoreSelector.value;
   playerScore = 0;
   computerScore = 0;
-  maxScore = +scoreSelector.value;
   playerScoreDisplay.textContent = 0;
   computerScoreDisplay.textContent = 0;
-  gameOver = false;
   setStyle("reset");
 }
 
-function isGameOver() {
-  if (gameOver) return;
+function checkGameState() {
+  if (isGameOver) return;
   if (playerScore === maxScore) {
-    roundResult.textContent = "You won!";
+    isGameOver = true;
     playerScoreDisplay.classList.add('win-game');
     computerScoreDisplay.classList.add('lose-game');
-    gameOver = true;
+    gameDialog.textContent = "You won!";
   } else if (computerScore === maxScore) {
-    roundResult.textContent = "The computer won!";
-    computerScoreDisplay.classList.add('win-game');
+    isGameOver = true;
     playerScoreDisplay.classList.add('lose-game');
-    gameOver = true;
+    computerScoreDisplay.classList.add('win-game');
+    gameDialog.textContent = "The computer won!";
   }
 }
