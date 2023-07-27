@@ -1,3 +1,11 @@
+:root {
+  --main-color: #d9d9d9;
+  --secondary-color: #353535;
+  --background-color: #284b63;
+  --success-color: #38b000;
+  --failure-color: #f94144;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -8,8 +16,8 @@ html {
 
 body {
   margin: 0;
-  color: #e9c46a;
-  background: #264653;
+  color: var(--secondary-color);
+  background-color: var(--background-color);
   margin-top: 6rem;
   overflow: hidden;
 }
@@ -19,15 +27,14 @@ h1 {
   text-align: center;
   margin-block: 0;
   padding-block: 1rem;
-  border-bottom: 10px solid #e9c46a;
+  border-bottom: 10px solid var(--secondary-color);
 }
 
 button {
   font-family: inherit;
   font-size: 1.4rem;
-  color: #264653;
-  background: #f4a261;
-  font-size: 1.4rem;
+  color: #d9d9d9;
+  background-color: var(--secondary-color);
   padding: 0.3em 1.5em;
   cursor: pointer;
   border: none;
@@ -37,28 +44,25 @@ button {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  background: #264653;
-  border: 10px solid #e9c46a;
-}
-
-.status {
-  /* margin-bottom: 1.5rem; */
+  background-color: var(--main-color);
+  border: 10px solid var(--secondary-color);
 }
 
 .player,
 .computer {
   display: inline-block;
   font-size: 8rem;
+  transition: all 0.5s;
 }
 
 .score {
   display: flex;
   justify-content: space-evenly;
-  border-bottom: 10px solid #e9c46a;
+  border-bottom: 10px solid var(--secondary-color);
 }
 
-span {
-  border-right: 10px solid #e9c46a;
+.divider {
+  border-right: 10px solid var(--secondary-color);
 }
 
 .round-result {
@@ -88,48 +92,55 @@ span {
 .set-score {
   display: flex;
   gap: 0.5rem;
-  align-items:center;
+  align-items: center;
 }
 
 .set-score label {
-    font-size: 1.6rem;
+  font-size: 1.6rem;
 }
 
 .set-score #score {
   border: none;
-  margin-top:.26rem;
+  margin-top: 0.26rem;
 }
 
-.draw {
-  color: #ffd60a;
+.win-round {
+  color: var(--success-color);
   transform: scale(1.2);
 }
 
-.win {
-  color: #06d6a0;
+.lose-round {
+  color: var(--failure-color);
   transform: scale(1.2);
 }
 
-.lose {
-  color: #ef476f;
+.draw-round {
+  color: #f9c74f;
   transform: scale(1.2);
+}
+
+.win-game {
+  color: var(--success-color);
+  transform: scale(1.2);
+}
+
+.lose-game {
+  color: var(--failure-color);
+  transform: scale(0.8);
 }
 
 @media (min-width: 600px) {
-    .actions {
-        justify-content: space-evenly;
-    }
-    .score-control {
-        justify-content: center;
-      }
+  .actions {
+    justify-content: space-evenly;
+  }
+  .score-control {
+    justify-content: center;
+  }
 }
 
 @media (min-width: 810px) {
-  body {
-    margin-top: 6rem;
-  }
   .game {
-    width: 50rem;
+    width: 40rem;
   }
   .actions {
     justify-content: center;
